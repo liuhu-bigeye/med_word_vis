@@ -12,3 +12,12 @@ May 2016
 
 + Visualize by Sigma.js
 **************************
+
+###Version 0.0
++ visualization path: tools/sigma.js/experiments/load-external-json.html
+
++ scripts path: scripts/generate_json.py
+
++ filter: cosine correlation > 0.95 and not with the same tag
+
++ 696 nodes(53 valid), 82 edges
