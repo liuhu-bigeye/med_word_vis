@@ -1,15 +1,16 @@
+# -*- coding: utf-8 -*-
 import pandas as pd
 import numpy as np
-import os, pdb, pickle, json
+import os, pdb, pickle, json, sys
 from scipy import spatial
 from sklearn.manifold import TSNE
 
 random_state = 1235
-cor_thre = 0.1
+cor_thre = 0.95
+#疾病, 表型, 用药
 colors = ['', '', '#00ff00', '#000000', '#660099']
 
 if __name__=='__main__':
-
 	#concat origin annotations
 	csv_names = ['lh.csv', 'mc.csv', 'qc.csv']
 	df = []
@@ -35,27 +36,35 @@ if __name__=='__main__':
 
 	# cosine distance
 	num, dim = features.shape
-	cosr = np.zeros((num, num))
-	for i in range(num):
-		print i
-		for j in range(i + 1, num):
-			cosr[i, j] = spatial.distance.cosine(features[i], features[j])
-	cosr += cosr.T
-	print data.name
+	if os.path.exists('../data/reduced_cos_dis.pkl'):
+		with open('../data/reduced_cos_dis.pkl') as f:
+			cosr = pickle.load(f)
+	else:
+		cosr = np.zeros((num, num))
+		for i in range(num):
+			print i
+			for j in range(i + 1, num):
+				cosr[i, j] = abs(1-spatial.distance.cosine(features[i], features[j]))
+		cosr += cosr.T
+		print data.name
 
 	g = {'nodes':[], 'edges':[]}
-	count = 0
+	count = np.zeros(num)
 	for i in range(num):
-		node = {'id': 'n_%d'%i, 'label':data['name'][i], 'x':features_reduced[i, 0], 'y':features_reduced[i, 1],
-						'size': np.sum(cosr[i]), 'color': colors[int(data['tag'][i])]}
-		g['nodes'].append(node)
 		for j in range(i + 1, num):
-			if cosr[i, j] > cor_thre:
-				edge = {'id': 'e_%d_%d'%(i, j), 'source': 'n_%d'%i, 'target': 'n_%d'%j, 'size': cosr[i, j], 'color': '#666666'}
+			if cosr[i, j] > cor_thre and data['tag'][i]!=data['tag'][j]:
+				edge = {'id': 'e_%d_%d'%(i, j), 'source': 'n_%d'%i, 'target': 'n_%d'%j, 'size': 0.1+(cosr[i, j]-cor_thre)/(1-cor_thre)*0.9, 'color': '#666666'}
 				g['edges'].append(edge)
-				count += 1
+				count[i]+=1
+				count[j]+=1
 
-	print count, num
+	for i in range(num):
+		if count[i]>0:
+			node = {'id': 'n_%d'%i, 'label':data['name'][i], 'x':features_reduced[i, 0], 'y':features_reduced[i, 1],
+					    'size': np.sum(cosr[i]), 'color': colors[int(data['tag'][i])]}
+			g['nodes'].append(node)
+
+	print np.sum(count), num, np.sum(count!=0), np.sum(count)/1.0/np.sum(count!=0)
 
 	with open('../data/med_data.json', 'wb') as f:
 		json.dump(g, f)
@@ -65,7 +74,7 @@ if __name__=='__main__':
 	#
 	# print features_reduced
 	#
-	# #dump to file
-	# data.to_csv('../data/reduced_features.csv')
-	# with open('../data/reduced_cos_dis.pkl', 'wb') as f:
-	# 	pickle.dump(cosr, f)
+	#dump to file
+	data.to_csv('../data/reduced_features.csv')
+	with open('../data/reduced_cos_dis.pkl', 'wb') as f:
+		pickle.dump(cosr, f)
