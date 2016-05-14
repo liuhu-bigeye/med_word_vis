@@ -6,7 +6,7 @@ from sklearn.manifold import TSNE
 
 random_state = 1235
 cor_thre = 0.1
-colors = ['', '', '#666', '#777', '#888']
+colors = ['', '', '#00ff00', '#000000', '#660099']
 
 if __name__=='__main__':
 
@@ -46,12 +46,12 @@ if __name__=='__main__':
 	g = {'nodes':[], 'edges':[]}
 	count = 0
 	for i in range(num):
-		node = {'id': 'n_'+i, 'label':data['name'][i], 'x':features_reduced[i, 0], 'y':features_reduced[i, 1],
-						'size': np.sum(cosr[i]), 'color': colors[data['tag'][i]]}
+		node = {'id': 'n_%d'%i, 'label':data['name'][i], 'x':features_reduced[i, 0], 'y':features_reduced[i, 1],
+						'size': np.sum(cosr[i]), 'color': colors[int(data['tag'][i])]}
 		g['nodes'].append(node)
 		for j in range(i + 1, num):
 			if cosr[i, j] > cor_thre:
-				edge = {'id': 'e_%d_%d'%(i, j), 'source': 'n_'+i, 'target': 'n_'+j, 'size': cosr[i, j], 'color': '#ccc'}
+				edge = {'id': 'e_%d_%d'%(i, j), 'source': 'n_%d'%i, 'target': 'n_%d'%j, 'size': cosr[i, j], 'color': '#666666'}
 				g['edges'].append(edge)
 				count += 1
 
