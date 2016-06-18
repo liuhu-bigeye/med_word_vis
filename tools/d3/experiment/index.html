@@ -1,0 +1,98 @@
+<html>  
+  <head>  
+        <meta charset="utf-8">  
+        <title>MedWordVis</title>  
+  <style>
+
+	.chord path {
+  		fill-opacity: 0.67;
+  		stroke: #000;
+  		stroke-width: 0.5px;
+	}
+	#force{
+		width:800px;
+		height:500px;
+		border: thin solid #aaa;
+		float:left;
+	}
+	#data-info{
+		width:200px;
+		height:500px;
+		border: thin solid #aaa;
+		float:left;
+	}
+	
+	#matrix{
+		width:500px;
+		height:500px;
+		border: thin solid #aaa;
+		clear:left;
+		float:left;
+	}
+	#bundle{
+		width:500px;
+		height:500px;
+		border: thin solid #aaa;
+
+		float:left;
+	}
+	.background {
+		  fill: #eee;
+	}
+
+	line {
+	  stroke: #fff;
+	}
+
+	text {
+	  font: 10px sans-serif;
+	}
+
+	text.active {
+	  fill: red;
+	}
+	
+	.link {
+	  stroke: #ccc;
+	}
+	
+	.name {
+		pointer-events: none;
+		font: 10px sans-serif;
+	}
+
+	.brush .extent {
+	  fill-opacity: .1;
+	  stroke: #fff;
+	  shape-rendering: crispEdges;
+	}
+
+  </style>
+  </head> 
+    <body> 
+    <div id = "force"> </div>
+    <div id = "data-info" > 
+    <h3>Data Info<h3>
+
+    </div>
+    <div id = "matrix"> 
+    	<p>Order:
+  		<select id="order">
+    		<option value="name">by Name</option>
+    		<option value="count">by Frequency</option>
+    		<option value="group">by Cluster</option>
+  		</select>
+		</p>
+	</div>
+	<div id = "bundle" > </div>
+
+
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<!-- bundle-->
+	<script src="bundle.js"></script>
+	<script type="text/javascript" src="matrix.js">	</script>
+	<script src="force.js">	</script>
+
+
+    </body>  
+</html>  
