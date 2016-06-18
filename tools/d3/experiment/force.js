@@ -2,7 +2,7 @@ render_force();
 	function render_force(){
 		var width = 800,
 		height = 500
-	
+			
 		var color = d3.scale.category20();
 
 		var svg = d3.select("#force").append("svg")
