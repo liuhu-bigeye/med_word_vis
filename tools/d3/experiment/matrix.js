@@ -142,6 +142,8 @@ render_matrix();
 		      d3.selectAll(".column text").classed("active", function(d, i) {
 		        return i == p.x;
 		      });
+		      d3.select("#data-info").select("#content")
+		      	.text(nodes[p.x].name+','+nodes[p.y].name+':'+nodes[p.x].count.toFixed(2));
 		    }
 
 		    function mouseout() {

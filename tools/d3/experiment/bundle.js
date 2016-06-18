@@ -101,13 +101,9 @@ d3.json("bundle_data3.json", function(error, data) {
 							{ return 0.2;}
 					});
 				d3.select("#data-info")
-					.selectAll("p")
-					.data(d)
-					.enter()
-					.append("p")
-					.text(names[d.source.index].toString+ "与"
-						 +names[d.target.index].toString + "的相关度为"
-						 +cosr[d.source.index][d.target.index].toString)
+					.select("#content")
+					.text(names[d.source.index]+','+names[d.target.index]+': \n'+
+						cosmat[d.source.index][d.target.index].toFixed(2) );
 
 			})
 			.on("mouseout",function(d,i){
@@ -117,14 +113,28 @@ d3.json("bundle_data3.json", function(error, data) {
 
 		g_outer.selectAll("path")
 				.on("mouseover",function(d,i){
+				str = names[i] + ":";
+				flag = false
 				g_iner.selectAll("path")
 					  .style("opacity",function(p){
+					  	console.log(p)
 					  	if((p.source.index != i) && (p.target.index != i)) 
 					  		{  return 0.2; }
 					  	else
-					  		{  return 0.8;} 
+					  		{  
+					  			if (p.source.index == i){
+					  				j = p.target.index;
+					  			}
+					  			else { j = p.source.index;}
+					  			if (flag) { str = str + "," }
+					  			flag = true
+					  			str = str  + names[j] + "(" + cosmat[i][j].toFixed(2) + ")";
+					  			return 0.8;
+					  		} 
 					  });
-				
+				d3.select("#data-info")
+								.select("#content")
+								.text(str);
 				})
 				.on("mouseout",function(d,i){
 				g_iner.selectAll("path")
