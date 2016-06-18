@@ -21,3 +21,6 @@ May 2016
 + filter: cosine correlation > 0.95 and not with the same tag
 
 + 696 nodes(53 valid), 82 edges
+
+##Annotation
++ 2:病灶, 3:表型，4:用药

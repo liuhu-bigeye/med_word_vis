@@ -40,7 +40,7 @@ if __name__=='__main__':
     print data.name
 
     with open('../data/cos_dis.json', 'wb') as f:
-        df = {'names':df.values[:,0].tolist(), 'cosr':cosr.tolist()}
+        df = {'names':df.values[:,0].tolist(), 'cosr':cosr.tolist(), 'tags':df.values[:,1].tolist()}
         json.dump(df, f)
 
     pdb.set_trace()
