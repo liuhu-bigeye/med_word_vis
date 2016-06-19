@@ -2,7 +2,7 @@ render_force();
 	function render_force(){
 		var width = 800,
 		height = 500
-	
+			
 		var color = d3.scale.category20();
 
 		var svg = d3.select("#force").append("svg")
@@ -15,7 +15,7 @@ render_force();
 			.charge(-100)
 			.size([width, height]);
 
-		d3.json("miserables.json", function(error, json) {
+		d3.json("force.json", function(error, json) {
 		  if (error) throw error;
 
 		  force
