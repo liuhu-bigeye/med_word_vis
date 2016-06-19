@@ -15,7 +15,7 @@ render_force();
 			.charge(-100)
 			.size([width, height]);
 
-		d3.json("miserables.json", function(error, json) {
+		d3.json("force.json", function(error, json) {
 		  if (error) throw error;
 
 		  force
