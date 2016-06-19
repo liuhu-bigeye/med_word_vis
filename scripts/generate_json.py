@@ -12,7 +12,7 @@ link_thre = 200
 #疾病, 表型, 用药
 colors = ['', '', '#00ff00', '#000000', '#660099']
 
-if __name__=='__main__':
+def generate():
     #concat origin annotations
     csv_names = ['lh.csv', 'mc.csv', 'qc.csv']
     df = []
@@ -49,7 +49,7 @@ if __name__=='__main__':
     #print data.name
 
     # no inner connections
-    cosr_outer = cosr
+    cosr_outer = cosr.copy()
     for i in range(num):
         for j in range(num):
             if data.tag[i]==data.tag[j]:
@@ -58,7 +58,7 @@ if __name__=='__main__':
 
     thre = 0.8
     best_indexs, best_score = [], 0
-    for i in range(100000):
+    for i in range(10):
         indexs = random.sample(range(num), 50)
         score = np.sum(cosr_outer[np.meshgrid(indexs, indexs)])
 
@@ -69,21 +69,27 @@ if __name__=='__main__':
 
     selected_nodes = best_indexs
 
+    with open('../tools/d3/experiment/force.json') as f:
+        nodes = json.load(f)
+    #pdb.set_trace()
+    selected_nodes = [data.name.values.tolist().index(n['name'].encode('utf-8')) for n in nodes['nodes']]
+
     miserables = {'nodes':[], 'links':[]}
     for index_i, i in enumerate(selected_nodes):
         node = {'name':data.name[i], 'group':int(data.tag[i])}
-        links = [{'source':index_i, 'target':index_i+1+index_j, 'value':100*(abs(cosr[i, j])-0.9)} for index_j,j in enumerate(selected_nodes[index_i+1:]) if abs(cosr[i, j])>thre]
+        links = [{'source':index_i, 'target':index_i+1+index_j, 'value':abs(cosr[i, j])} for index_j,j in enumerate(selected_nodes[index_i+1:]) if abs(cosr[i, j])>0]
 
         miserables['nodes'].append(node)
         miserables['links'].extend(links)
 
     print num, len(miserables['nodes']), len(miserables['links'])
 
-    with open('../tools/d3/experiment/force.json', 'wb') as f:
+    with open('../tools/d3/experiment/force_all.json', 'wb') as f:
         json.dump(miserables, f)
     #pdb.set_trace()
 
-
+if __name__=='__main__':
+    generate()
 
     #with open('../data/cos_dis.json', 'wb') as f:
     #    df = {'names':df.values[:,0].tolist(), 'cosr':cosr.tolist(), 'tags':df.values[:,1].tolist()}
