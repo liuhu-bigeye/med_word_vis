@@ -57,7 +57,7 @@ d3.json("miserables.json", function(error, json) {
 					 .innerRadius(innerRadius)
 					 .outerRadius(outerRadius);
 		
-		var g_outer = svg.append("g");
+		var g_outer = svg.append("g").attr("class","g_arc");
 		
 		g_outer.selectAll("path")
 				.data(groups)
@@ -89,7 +89,7 @@ d3.json("miserables.json", function(error, json) {
 		var inner_chord =  d3.svg.chord()
 						.radius(innerRadius);
 		
-		var g_iner = svg.append("g").attr("class", "chord");
+		var g_iner = svg.append("g").attr("class", "g_bundle");
 
 		g_iner.selectAll("path")
 			.data(chords)
@@ -122,39 +122,56 @@ d3.json("miserables.json", function(error, json) {
 					.select("#content")
 					.text(names[d.source.index]+','+names[d.target.index]+': \n'+
 						cosmat[d.source.index][d.target.index].toFixed(2) );
+				//mouseover on matrix
+				d3.selectAll(".row text").classed("active", function(p,j) {
+			        return j == d.target.index;
+			      });
+			    d3.selectAll(".column text").classed("active", function(p,j) {
+			        return j == d.source.index;
+			      });
 
 			})
 			.on("mouseout",function(d,i){
 				g_iner.selectAll("path")
 					  .style("opacity",0.8);
+				d3.selectAll(".row text").classed("active", false);
+				d3.selectAll(".column text").classed("active", false);
 			});
-
 		g_outer.selectAll("path")
 				.on("mouseover",function(d,i){
-				str = names[i] + ":";
-				flag = false
-				g_iner.selectAll("path")
-					  .style("opacity",function(p){
-					  	if((p.source.index != i) && (p.target.index != i)) 
-					  		{  return 0.2; }
-					  	else
-					  		{  
-					  			if (p.source.index == i){
-					  				j = p.target.index;
-					  			}
-					  			else { j = p.source.index;}
-					  			if (flag) { str = str + "," }
-					  			flag = true
-					  			str = str  + names[j] + "(" + cosmat[i][j].toFixed(2) + ")";
-					  			return 0.8;
-					  		} 
-					  });
-				d3.select("#data-info")
-								.select("#content")
-								.text(str);
+					str = names[i] + ":";
+					flag = false
+					g_iner.selectAll("path")
+						  .style("opacity",function(p){
+						  	if((p.source.index != i) && (p.target.index != i)) 
+						  		{  return 0.2; }
+						  	else
+						  		{  
+						  			if (p.source.index == i){
+						  				j = p.target.index;
+						  			}
+						  			else { j = p.source.index;}
+						  			if (flag) { str = str + "," }
+						  			flag = true
+						  			str = str  + names[j] + "(" + cosmat[i][j].toFixed(2) + ")";
+						  			return 0.8;
+						  		} 
+						  });
+					d3.select("#data-info")
+									.select("#content")
+									.text(str);
+					//mouseover on matrix
+					d3.selectAll(".row text").classed("active", function(p,j) {
+				        return j == i;
+				      });
+				    d3.selectAll(".column text").classed("active", function(p,j) {
+				        return j == i;
+				      });
 				})
 				.on("mouseout",function(d,i){
-				g_iner.selectAll("path")
-					.style("opacity",0.8);
+					g_iner.selectAll("path")
+						.style("opacity",0.8);
+					d3.selectAll(".row text").classed("active", false);
+					d3.selectAll(".column text").classed("active", false);
 			});
 		}
