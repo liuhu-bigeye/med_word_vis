@@ -257,8 +257,8 @@ function selectableForceDirectedGraph() {
 		
 		node.append("text")
 		.attr("class", "name")
-				.attr("dx", 12)
-				.attr("dy", ".35em")
+				.attr("dx", 2)
+				.attr("dy", ".5em")
 				.text(function(d) { return d.name });
 
         node.on("dblclick", function(d) { d3.event.stopPropagation(); })
