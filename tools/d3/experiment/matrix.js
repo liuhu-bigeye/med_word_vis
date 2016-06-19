@@ -1,13 +1,13 @@
 render_matrix();
 		function render_matrix(){
 		    var margin = {
-		        top: 30,
-		        right: 20,
+		        top: 40,
+		        right: 10,
 		        bottom: 10,
 		        left: 40
 		      },
-		      width = 350,
-		      height = 350;
+		      width = 300,
+		      height = 300;
 
 		    var x = d3.scale.ordinal().rangeBands([0, width]),
 		      z = d3.scale.linear().domain([0, 4]).clamp(true),
@@ -16,8 +16,8 @@ render_matrix();
 		    var svg = d3.select("#matrix").append("svg")
 		      .attr("width", width + margin.left + margin.right)
 		      .attr("height", height + margin.top + margin.bottom)
-		      .style("margin-left", margin.left + "px")
-		      .style("margin-top", margin.top + "px")
+		      .style("margin-left", "5px")
+		      .style("margin-top", "5px")
 		      .append("g")
 		      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -50,7 +50,6 @@ render_matrix();
 		    });
 
 		    //alert("matrix = "+  ) 
-
 		    // Precompute the orders.
 		    var orders = {
 		      name: d3.range(n).sort(function(a, b) {
