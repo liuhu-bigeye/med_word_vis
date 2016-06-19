@@ -97,8 +97,8 @@ function selectableForceDirectedGraph() {
     var vis = svg_graph.append("svg:g");
 
     vis.attr('stroke', 'black')
-    .attr('stroke-width', 1)
-    .attr('opacity', 0.8)
+    //.attr('stroke-width', 1)
+    .attr('opacity', 0.7)
     .attr('id', 'vis')
 
 

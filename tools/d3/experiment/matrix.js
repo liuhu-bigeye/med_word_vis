@@ -12,7 +12,8 @@ render_matrix();
 		    var x = d3.scale.ordinal().rangeBands([0, width]),
 		      z = d3.scale.linear().domain([0, 1]).clamp(true),
 		      c = d3.scale.category10().domain(d3.range(10));
-
+		    //var linkcolors =["#FFFF6F","#80FFFF","#FF77FF"];
+			var linkcolors2 =["#A6A600","#00AEAE","#AE00AE"];
 		    var svg = d3.select("#matrix").append("svg")
 		      .attr("width", width + margin.left + margin.right)
 		      .attr("height", height + margin.top + margin.bottom)
@@ -128,7 +129,13 @@ render_matrix();
 		          return z(d.z);
 		        })
 		        .style("fill", function(d) {
-		          return nodes[d.x].group == nodes[d.y].group ? c(nodes[d.x].group) : null;
+		        	//if(d.x==d.y){return "#eee"}
+		        	pair = [nodes[d.x].group,nodes[d.y].group].toString()
+			    	if ( (pair == [2.0,3.0].toString()) || (pair == [3.0,2.0].toString()) )
+			    	 	{return linkcolors2[0];}
+			    	else if ( (pair == [3.0,4.0].toString()) || (pair == [4.0,3.0].toString()) )
+			    	 	{return linkcolors2[1];}
+			    	else {return linkcolors2[2]; }
 		        })
 		        .on("mouseover", mouseover)
 		        .on("mouseout", mouseout);
@@ -144,8 +151,9 @@ render_matrix();
 		      d3.select("#data-info").select("#content")
 		      	.text(nodes[p.x].name+','+nodes[p.y].name+':'+nodes[p.x].count.toFixed(2));
 		      //  mouseover event on bundle 
-		     console.log(d3.select(".g_bundle"));
-		      d3.select(".g_bundle")
+		     if(p.x!=p.y)
+		     {
+		     	d3.select(".g_bundle")
 		      	.selectAll("path")
 					  .style("opacity",function(d){
 						if (  ((p.x==d.source.index) && (p.y == d.target.index))
@@ -159,7 +167,18 @@ render_matrix();
 					.select("#content")
 					.text(names[d.source.index]+','+names[d.target.index]+': \n'+
 						cosmat[d.source.index][d.target.index].toFixed(2) );
-
+		     }
+		     else
+		     {
+		     	d3.select(".g_bundle")
+		     	.selectAll("path")
+						  .style("opacity",function(d){
+						  	if((d.source.index != p.x) && (d.target.index != p.x)) 
+						  		{  return 0.2; }
+						  	else
+						  		{  return 0.8; } 
+						  });
+		     }
 		    }
 
 		    function mouseout() {
