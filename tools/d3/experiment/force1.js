@@ -65,7 +65,7 @@ function selectableForceDirectedGraph() {
 		var str=''
 		node.filter(function(d){
 			if(d.selected==true){
-				str=str+d.name+':'+d.group+'-';
+				str=str+d.name+':'+d.group+',';
 			}
 		})
 		d3.select("#data-info").select("#content").text(str);
@@ -275,7 +275,7 @@ function selectableForceDirectedGraph() {
 			var str=''
 			node.filter(function(d){
 				if(d.selected==true){
-					str=str+d.name+':'+d.group+'-';
+					str=str+d.name+':'+d.group+',';
 				}
 			})
 			d3.select("#data-info").select("#content").text(str);
