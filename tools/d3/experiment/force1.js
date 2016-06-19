@@ -181,7 +181,7 @@ function selectableForceDirectedGraph() {
 
     }
 
-    d3.json("miserables.json", function(error, graph) {
+    d3.json("force.json", function(error, graph) {
         nodeGraph = graph;
 
         graph.links.forEach(function(d) {
