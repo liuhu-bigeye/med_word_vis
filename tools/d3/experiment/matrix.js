@@ -143,10 +143,30 @@ render_matrix();
 		      });
 		      d3.select("#data-info").select("#content")
 		      	.text(nodes[p.x].name+','+nodes[p.y].name+':'+nodes[p.x].count.toFixed(2));
+		      //  mouseover event on bundle 
+		     console.log(d3.select(".g_bundle"));
+		      d3.select(".g_bundle")
+		      	.selectAll("path")
+					  .style("opacity",function(d){
+						if (  ((p.x==d.source.index) && (p.y == d.target.index))
+								|| ((p.y==d.source.index) && (p.x == d.target.index))  )
+							{ return 0.8;}
+						else
+							{ return 0.2;}
+						});
+				// show names and values in #data-info
+				d3.select("#data-info")
+					.select("#content")
+					.text(names[d.source.index]+','+names[d.target.index]+': \n'+
+						cosmat[d.source.index][d.target.index].toFixed(2) );
+
 		    }
 
 		    function mouseout() {
 		      d3.selectAll("text").classed("active", false);
+		      d3.select(".g_bundle")
+		      	.selectAll("path")
+				.style("opacity",0.8);
 		    }
 
 		    d3.select("#order").on("change", function() {
