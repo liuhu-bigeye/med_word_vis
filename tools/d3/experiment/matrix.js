@@ -10,7 +10,7 @@ render_matrix();
 		      height = 300;
 
 		    var x = d3.scale.ordinal().rangeBands([0, width]),
-		      z = d3.scale.linear().domain([0, 1]).clamp(true),
+		      z = d3.scale.linear().domain([0, 4]).clamp(true),
 		      c = d3.scale.category10().domain(d3.range(10));
 		    //var linkcolors =["#FFFF6F","#80FFFF","#FF77FF"];
 			var linkcolors2 =["#A6A600","#00AEAE","#AE00AE"];
@@ -149,7 +149,7 @@ render_matrix();
 		        return i == p.x;
 		      });
 		      d3.select("#data-info").select("#content")
-		      	.text(nodes[p.x].name+','+nodes[p.y].name+':'+nodes[p.x].count.toFixed(2));
+		      	.text(nodes[p.x].name+','+nodes[p.y].name+':'+(matrix[p.x][p.y].z/2).toFixed(2));
 		      //  mouseover event on bundle 
 		     if(p.x!=p.y)
 		     {
