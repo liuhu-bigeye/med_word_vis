@@ -1,15 +1,33 @@
-d3.json("bundle_data3.json", function(error, data) {
+d3.json("miserables.json", function(error, json) {
 		if (error) throw error;
-		render_bundle(data)
+		var names = [];
+		var tags = [];
+		var nodes = json.nodes,links = json.links;
+		var n = nodes.length;
+		var cosmat = new Array(n);
+		for (i=0;i<n;i++)
+		{
+			cosmat[i] = new Array(n);
+			for (j=0;j<n;j++)
+			{
+				cosmat[i][j] = 0;
+			}
+		}
+		nodes.forEach(function(node, i) {
+			names[i] = node.name;
+			tags[i] = node.group;
+		});
+		
+		links.forEach(function(link,i){
+			cosmat[link.source][link.target] = link.value;
+		});
+		console.log(cosmat);
+		render_bundle(names,cosmat,tags)
 	});
-	function render_bundle(data){
+	function render_bundle(names,cosmat,tags){
 		//1.定义数据
 		var nodecolors =["#FF2D2D","#79FF79","#9393FF"];
 		var linkcolors =["#FFFF6F","#80FFFF","#FF77FF"];
-
-		var names = data.names;
-		var cosmat = data.cosr;
-		var tags = data.tags;
 
 		//2.转换数据，并输出转换后的数据					
 		var chord_layout = d3.layout.chord()
@@ -21,8 +39,8 @@ d3.json("bundle_data3.json", function(error, data) {
 		var chords = chord_layout.chords();
 		
 		//3.SVG，弦图，颜色函数的定义
-		var width  = 500;
-		var height = 500;
+		var width  = 400;
+		var height = 400;
 		var innerRadius = width/2 * 0.7;
 		var outerRadius = innerRadius * 1.1;
 
@@ -117,7 +135,6 @@ d3.json("bundle_data3.json", function(error, data) {
 				flag = false
 				g_iner.selectAll("path")
 					  .style("opacity",function(p){
-					  	console.log(p)
 					  	if((p.source.index != i) && (p.target.index != i)) 
 					  		{  return 0.2; }
 					  	else

@@ -3,7 +3,11 @@ render_force();
 		var width = 800,
 		height = 500
 			
-		var color = d3.scale.category20();
+		function color(grp){
+			console.log(grp);
+			col = ["#EA0000","#28FF28","#6A6AFF"];
+			return col[grp-2];
+		}
 
 		var svg = d3.select("#force").append("svg")
 			.attr("width", width)
@@ -43,7 +47,8 @@ render_force();
 				.attr("class", "name")
 				.attr("dx", 12)
 				.attr("dy", ".35em")
-				.text(function(d) { return d.name });
+				.text(function(d) { return d.name })
+				.style("font-family","sans-serif");
 
 		  var brush = svg.append("g")
 				.attr("class", "brush")

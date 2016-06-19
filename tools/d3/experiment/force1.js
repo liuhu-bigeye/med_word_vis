@@ -1,11 +1,15 @@
 selectableForceDirectedGraph();
 function selectableForceDirectedGraph() {
-    var width = 800,
+    var width = 600,
 
-    height = 500,
+    height = 400,
     shiftKey, ctrlKey;
 
-    var color = d3.scale.category20();
+    function color(grp){
+            //console.log(grp);
+            col = ["#EA0000","#28FF28","#6A6AFF"];
+            return col[grp-2];
+        }
 	var nodeGraph = null;
     var xScale = d3.scale.linear()
     .domain([0,width]).range([0,width]);
@@ -94,7 +98,7 @@ function selectableForceDirectedGraph() {
 
     vis.attr('stroke', 'black')
     .attr('stroke-width', 1)
-    .attr('opacity', 0.5)
+    .attr('opacity', 0.8)
     .attr('id', 'vis')
 
 
@@ -238,6 +242,7 @@ function selectableForceDirectedGraph() {
 		node = node.data(graph.nodes)
 		.enter()
 		.append("g")
+        .attr("class","node")
 		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 		
 		
@@ -247,6 +252,7 @@ function selectableForceDirectedGraph() {
 //        .attr("cx", function(d) { return d.x; })
 //        .attr("cy", function(d) { return d.y; })
 		.style("stroke", "gray")
+        //.style("stroke-width",1px)
 		.style("fill", function(d) { return color(d.group); });
 		
 		node.append("text")
@@ -254,7 +260,7 @@ function selectableForceDirectedGraph() {
 				.attr("dx", 12)
 				.attr("dy", ".35em")
 				.text(function(d) { return d.name });
-				
+
         node.on("dblclick", function(d) { d3.event.stopPropagation(); })
         .on("click", function(d) {
             if (d3.event.defaultPrevented) return;
@@ -306,7 +312,7 @@ function selectableForceDirectedGraph() {
         shiftKey = d3.event.shiftKey || d3.event.metaKey;
         ctrlKey = d3.event.ctrlKey;
 
-        console.log('d3.event', d3.event)
+        //console.log('d3.event', d3.event)
 
         if (d3.event.keyCode == 67) {   //the 'c' key
             center_view();
