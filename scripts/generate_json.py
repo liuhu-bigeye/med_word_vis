@@ -8,7 +8,7 @@ import pdb
 import random
 
 random_state = 1235
-cor_thre = 0.90
+link_thre = 200
 #疾病, 表型, 用药
 colors = ['', '', '#00ff00', '#000000', '#660099']
 
@@ -31,12 +31,12 @@ if __name__=='__main__':
     data = data[data.tag>1]
 
     print data.shape
-    pdb.set_trace()
-    data = data.loc[random.sample(range(data.shape[0]), 20)]
+    #pdb.set_trace()
+    #data = data.loc[random.sample(range(data.shape[0]), 20)]
     data = data.reset_index(drop=True)
     print data.shape
 
-    features = data.values[:,2:]
+    features = data.values[:,5:]
 
     num, dim = features.shape
     cosr = np.zeros((num, num))
@@ -46,20 +46,40 @@ if __name__=='__main__':
         for j in range(i + 1, num):
             cosr[i, j] = abs(1-spatial.distance.cosine(features[i], features[j]))
     cosr += cosr.T
-    print data.name
+    #print data.name
 
-    cosr = cosr * 200 - 170
+    # no inner connections
+    cosr_outer = cosr
+    for i in range(num):
+        for j in range(num):
+            if data.tag[i]==data.tag[j]:
+                cosr_outer[i][j]=0
+    cosr_outer = np.abs(cosr_outer)
+
+    thre = 0.8
+    best_indexs, best_score = [], 0
+    for i in range(100000):
+        indexs = random.sample(range(num), 50)
+        score = np.sum(cosr_outer[np.meshgrid(indexs, indexs)])
+
+        if score>best_score:
+            best_indexs = [ind for ind in indexs if np.max(cosr_outer[ind, indexs])>thre]
+            best_score = score
+            print score
+
+    selected_nodes = best_indexs
 
     miserables = {'nodes':[], 'links':[]}
-    thre = 0
-    for i in range(num):
+    for index_i, i in enumerate(selected_nodes):
         node = {'name':data.name[i], 'group':int(data.tag[i])}
-        links = [{'source':i, 'target':j, 'value':cosr[i, j]} for j in range(i+1, num) if cosr[i, j]>thre]
+        links = [{'source':index_i, 'target':index_i+1+index_j, 'value':100*(abs(cosr[i, j])-0.9)} for index_j,j in enumerate(selected_nodes[index_i+1:]) if abs(cosr[i, j])>thre]
+
         miserables['nodes'].append(node)
         miserables['links'].extend(links)
-    print len(miserables['links'])
 
-    with open('../tools/d3/experiment/miserables.json', 'wb') as f:
+    print num, len(miserables['nodes']), len(miserables['links'])
+
+    with open('../tools/d3/experiment/force.json', 'wb') as f:
         json.dump(miserables, f)
     #pdb.set_trace()
 
