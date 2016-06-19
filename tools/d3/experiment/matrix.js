@@ -129,7 +129,7 @@ render_matrix();
 		          return z(d.z);
 		        })
 		        .style("fill", function(d) {
-		        	//if(d.x==d.y){return "#eee"}
+		        	if(d.x==d.y){return "#eee"}
 		        	pair = [nodes[d.x].group,nodes[d.y].group].toString()
 			    	if ( (pair == [2.0,3.0].toString()) || (pair == [3.0,2.0].toString()) )
 			    	 	{return linkcolors2[0];}
