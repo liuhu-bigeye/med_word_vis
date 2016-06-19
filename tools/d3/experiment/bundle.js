@@ -1,4 +1,4 @@
-d3.json("miserables.json", function(error, json) {
+d3.json("force.json", function(error, json) {
 		if (error) throw error;
 		var names = [];
 		var tags = [];

@@ -10,7 +10,7 @@ render_matrix();
 		      height = 300;
 
 		    var x = d3.scale.ordinal().rangeBands([0, width]),
-		      z = d3.scale.linear().domain([0, 4]).clamp(true),
+		      z = d3.scale.linear().domain([0, 1]).clamp(true),
 		      c = d3.scale.category10().domain(d3.range(10));
 
 		    var svg = d3.select("#matrix").append("svg")
@@ -21,7 +21,7 @@ render_matrix();
 		      .append("g")
 		      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-		    d3.json("miserables.json", function(miserables) {
+		    d3.json("force_all.json", function(miserables) {
 		    var matrix = [],
 		      nodes = miserables.nodes,
 		      n = nodes.length;
