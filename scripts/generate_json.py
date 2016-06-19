@@ -58,8 +58,8 @@ def generate():
 
     thre = 0.8
     best_indexs, best_score = [], 0
-    for i in range(10):
-        indexs = random.sample(range(num), 50)
+    for i in range(100000):
+        indexs = random.sample(range(num), 20)
         score = np.sum(cosr_outer[np.meshgrid(indexs, indexs)])
 
         if score>best_score:
@@ -69,23 +69,31 @@ def generate():
 
     selected_nodes = best_indexs
 
-    with open('../tools/d3/experiment/force.json') as f:
-        nodes = json.load(f)
-    #pdb.set_trace()
-    selected_nodes = [data.name.values.tolist().index(n['name'].encode('utf-8')) for n in nodes['nodes']]
+    #with open('../tools/d3/experiment/force.json') as f:
+    #    nodes = json.load(f)
+    ##pdb.set_trace()
+    #selected_nodes = [data.name.values.tolist().index(n['name'].encode('utf-8')) for n in nodes['nodes']]
 
     miserables = {'nodes':[], 'links':[]}
+    miserables_all = {'nodes':[], 'links':[]}
+
     for index_i, i in enumerate(selected_nodes):
         node = {'name':data.name[i], 'group':int(data.tag[i])}
-        links = [{'source':index_i, 'target':index_i+1+index_j, 'value':abs(cosr[i, j])} for index_j,j in enumerate(selected_nodes[index_i+1:]) if abs(cosr[i, j])>0]
+        links = [{'source':index_i, 'target':index_j, 'value':abs(cosr[i, j])} for index_j,j in enumerate(selected_nodes) if index_i!=index_j and abs(cosr[i, j])>thre]
+        links_all = [{'source':index_i, 'target':index_j, 'value':abs(cosr[i, j])} for index_j,j in enumerate(selected_nodes) if index_i!=index_j and abs(cosr[i, j])>0]
 
         miserables['nodes'].append(node)
         miserables['links'].extend(links)
 
+        miserables_all['nodes'].append(node)
+        miserables_all['links'].extend(links)
+
     print num, len(miserables['nodes']), len(miserables['links'])
 
-    with open('../tools/d3/experiment/force_all.json', 'wb') as f:
+    with open('../tools/d3/experiment/force.json', 'wb') as f:
         json.dump(miserables, f)
+    with open('../tools/d3/experiment/force_all.json', 'wb') as f:
+        json.dump(miserables_all, f)
     #pdb.set_trace()
 
 if __name__=='__main__':
