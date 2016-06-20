@@ -2,7 +2,7 @@ render_matrix();
 		function render_matrix(){
 		    var margin = {
 		        top: 40,
-		        right: 10,
+		        right: 20,
 		        bottom: 10,
 		        left: 40
 		      },
@@ -13,7 +13,7 @@ render_matrix();
 		      z = d3.scale.linear().domain([0, 4]).clamp(true),
 		      c = d3.scale.category10().domain(d3.range(10));
 		    //var linkcolors =["#FFFF6F","#80FFFF","#FF77FF"];
-			var linkcolors2 =["#A6A600","#00AEAE","#AE00AE"];
+			var linkcolors2 =["#A6A600","#00AEAE","#AE00AE","#9393FF"];
 		    var svg = d3.select("#matrix").append("svg")
 		      .attr("width", width + margin.left + margin.right)
 		      .attr("height", height + margin.top + margin.bottom)
@@ -22,7 +22,7 @@ render_matrix();
 		      .append("g")
 		      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-		    d3.json("force_all.json", function(miserables) {
+		    d3.json("_force_all.json", function(miserables) {
 		    var matrix = [],
 		      nodes = miserables.nodes,
 		      n = nodes.length;
@@ -135,7 +135,9 @@ render_matrix();
 			    	 	{return linkcolors2[0];}
 			    	else if ( (pair == [3.0,4.0].toString()) || (pair == [4.0,3.0].toString()) )
 			    	 	{return linkcolors2[1];}
-			    	else {return linkcolors2[2]; }
+			    	else if ( (pair == [2.0,4.0].toString()) || (pair == [4.0,2.0].toString()) )
+			    		{return linkcolors2[2];}
+			    	else{return linkcolors2[3]}
 		        })
 		        .on("mouseover", mouseover)
 		        .on("mouseout", mouseout);
