@@ -65,7 +65,7 @@ render_matrix();
 		    };
 
 		    // The default sort order.
-		    x.domain(orders.name);
+		    x.domain(orders.group);
 
 		    svg.append("rect")
 		      .attr("class", "background")
